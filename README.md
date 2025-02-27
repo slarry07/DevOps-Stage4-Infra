@@ -2,7 +2,13 @@
 # Infrastructure Setup
 
 ## Overview
-This project sets up an infrastructure environment using Terraform, Ansible, and Docker. The setup provisions an Azure virtual machine, installs necessary dependencies using Ansible, and deploys containerized services using Docker and Traefik as a reverse proxy.
+This project automates infrastructure provisioning and application deployment using Terraform, Ansible, Docker, and Traefik. The setup includes:
+
+Provisioning an Azure Virtual Machine with Terraform.
+
+Configuring the VM with necessary dependencies using Ansible.
+
+Deploying containerized services using Docker and managing traffic with Traefik.
 
 ## Technologies Used
 - **Terraform**: Infrastructure as Code (IaC) for provisioning Azure resources.
@@ -14,7 +20,7 @@ This project sets up an infrastructure environment using Terraform, Ansible, and
 
 ### 1. Terraform Configuration
 The Terraform script provisions the following resources on Azure:
-- A **Resource Group** (`devops-stage-4-rg`)
+- A **Resource Group** (`devops-stage-rg`)
 - A **Virtual Network** (`devops-vnet`)
 - A **Subnet** (`devops-subnet`)
 - A **Network Security Group** (NSG) with rules for SSH (22), HTTP (80), and HTTPS (443)
@@ -51,7 +57,7 @@ Ansible is used to set up the VM with Docker and deploy the application.
 - Start the application using Docker Compose
 
 #### Running Ansible
-The Terraform script copies the Ansible playbook to the VM and executes it. You can also manually run the playbook using:
+The Terraform script automatically transfers and executes the Ansible playbook on the VM. You can also run it manually:
 ```sh
 ansible-playbook -i inventory ansible-playbook.yml
 ```
@@ -66,20 +72,20 @@ The project uses Docker Compose to manage services. Traefik is configured as the
 - **Auth API** (handles authentication services)
 
 #### Deploying the Application
-If Ansible setup was successful, the application should be running. You can manually verify and restart services using:
+If Ansible setup completes successfully, the application should be running. You can verify and restart services manually:
 ```sh
 docker-compose up -d
 ```
 
 ## Accessing the Services
 - The APIs are accessible via:
-  - `https://users.todo-hng.com/api/users`
-  - `https://auth.todo-hng.com/api/auth`
+  - `https://users.mytodoapp.org/api/users`
+  - `https://auth.mytodoapp.org/api/auth`
 - The Traefik dashboard is available at `http://<public-ip>:8080`
 
 ## Cleanup
-To remove the infrastructure:
+To tear down the infrastructure, run:
 ```sh
 terraform destroy -auto-approve
 ```
-
+This setup ensures a fully automated and reproducible infrastructure for seamless deployment and scaling.
